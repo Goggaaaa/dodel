@@ -1,0 +1,36 @@
+name: Docker Publish
+
+on:
+  push:
+    branches:
+      - main |
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Login to GitHub Package Registry
+      run: echo "${{ secrets.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 }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+
+    - name: Build and push Node.js image
+      run: docker build -t docker.pkg.github.com/${{ github.repository }}/node-image:latest -f Dockerfile.node .
+
+    - name: Build and push Python image
+      run: docker build -t docker.pkg.github.com/${{ github.repository }}/python-image:latest -f Dockerfile.python .
+
+    - name: Push Node.js image
+      run: docker push docker.pkg.github.com/${{ github.repository }}/node-image:latest
+
+    - name: Push Python image
+      run: docker push docker.pkg.github.com/${{ github.repository }}/python-image:latest
+
+    - name: Notify on Telegram
+      run: |
+        curl -s -X POST https://api.telegram.org/bot6416575253:AAGhiu8a4158ZkO8YOaMi5ySsjGQrrBCtGU/sendMessage -d "chat_id=723707012" -d "text=Images have been successfully built and pushed to GitHub Package Registry."
+      env:
+        TELEGRAM_BOT_TOKEN: ${{ secrets.6416575253:AAGhiu8a4158ZkO8YOaMi5ySsjGQrrBCtGU }}
+        TELEGRAM_CHAT_ID: ${{ secrets.723707012 }}
