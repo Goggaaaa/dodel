@@ -32,5 +32,5 @@ jobs:
       run: |
         curl -s -X POST https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage -d "chat_id=$TELEGRAM_CHAT_ID" -d "text=Images have been successfully built and pushed to GitHub Package Registry."
       env:
-        TELEGRAM_BOT_TOKEN: ${{ secrets.6729073616:AAHYi0Li7DCSvTfghB0beJWEOWgUhvFZYBU }}
+        TELEGRAM_BOT_TOKEN: ${{ secrets.6416575253:AAGhiu8a4158ZkO8YOaMi5ySsjGQrrBCtGU }}
         TELEGRAM_CHAT_ID: ${{ secrets.723707012 }}
