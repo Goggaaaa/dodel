@@ -1,20 +1,36 @@
-name: telegram message
-on: [push]
-jobs:
+name: Docker Publish
 
-  build:
-    name: Build
+on:
+  push:
+    branches:
+      - main 
+
+jobs:
+  publish:
     runs-on: ubuntu-latest
+
     steps:
-      - name: send telegram message on push
-        uses: appleboy/telegram-action@master
-        with:
-          to: ${{ secrets.723707012 }}
-          token: ${{ secrets.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 }}
-          message: |
-            ${{ github.actor }} created commit:
-            Commit message: ${{ github.event.commits[0].message }}
-            
-            Repository: ${{ github.repository }}
-            
-            See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
+    - name: Checkout repository
+      uses: appleboy/telegram-action@master
+
+    - name: Login to GitHub Package Registry
+      run: echo "${{ secrets.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 }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+
+    - name: Build and push Node.js image
+      run: docker build -t docker.pkg.github.com/${{ github.repository }}/node-image:latest -f Dockerfile.node .
+
+    - name: Build and push Python image
+      run: docker build -t docker.pkg.github.com/${{ github.repository }}/python-image:latest -f Dockerfile.python .
+
+    - name: Push Node.js image
+      run: docker push docker.pkg.github.com/${{ github.repository }}/node-image:latest
+
+    - name: Push Python image
+      run: docker push docker.pkg.github.com/${{ github.repository }}/python-image:latest
+
+    - name: Notify on Telegram
+      run: |
+        curl -s -X POST https//api.telegram.org/bot${{ secrets.6729073616:AAHYi0Li7DCSvTfghB0beJWEOWgUhvFZYBU }}/sendMessage -d "chat_id=${{ secrets.723707012 }}" -d "text=Images have been successfully built and pushed to GitHub Package Registry."
+      env:
+        TELEGRAM_BOT_TOKEN: ${{ secrets.6729073616:AAHYi0Li7DCSvTfghB0beJWEOWgUhvFZYBU }}
+        TELEGRAM_CHAT_ID: ${{ secrets.723707012 }}
