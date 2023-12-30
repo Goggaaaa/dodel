@@ -30,7 +30,7 @@ jobs:
 
     - name: Notify on Telegram
       run: |
-        curl -s -X POST https//api.telegram.org/bot${{ secrets.6729073616:AAHYi0Li7DCSvTfghB0beJWEOWgUhvFZYBU }}/sendMessage -d "chat_id=${{ secrets.723707012 }}" -d "text=Images have been successfully built and pushed to GitHub Package Registry."
+        curl -s -X POST https//api.telegram.org/bot${{ secrets.6416575253:AAEywhUpz_SDsndVFMylhzOyEixOsFSr9As }}/sendMessage -d "chat_id=${{ secrets.723707012 }}" -d "text=Images have been successfully built and pushed to GitHub Package Registry."
       env:
-        TELEGRAM_BOT_TOKEN: ${{ secrets.6729073616:AAHYi0Li7DCSvTfghB0beJWEOWgUhvFZYBU }}
+        TELEGRAM_BOT_TOKEN: ${{ secrets.6416575253:AAEywhUpz_SDsndVFMylhzOyEixOsFSr9As }}
         TELEGRAM_CHAT_ID: ${{ secrets.723707012 }}
